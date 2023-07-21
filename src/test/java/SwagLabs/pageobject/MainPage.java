@@ -8,48 +8,47 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 
 public class MainPage extends PageObject {
-    @FindBy(xpath = "//button[@id='react-burger-menu-btn']")
+    @FindBy(id="react-burger-menu-btn")
     WebElementFacade menuButton;
 
-    @FindBy(xpath = "//select[@class='product_sort_container']")
+    @FindBy(className = "product_sort_container")
     WebElementFacade productSortSelector;
 
     @FindBy(xpath = "//select[@class='product_sort_container']//option[contains(text(),'Price (low to high)')]")
     WebElementFacade sortLowToHighOption;
 
-    static String aboutPageLinkXpath = "//a[@id='about_sidebar_link']";
+    static String aboutPageLinkId = "about_sidebar_link";
     WebElementFacade aboutPageLink;
-    static String resetStateLinkXpath = "//a[@id='reset_sidebar_link']";
+    static String resetStateLinkId= "reset_sidebar_link";
     WebElementFacade resetStateLink;
 
-    static String productsAddButtonsXpath = "//button[@class='btn btn_primary btn_small btn_inventory']";
+    static String productsAddButtonsClass = "btn_inventory";
     static List<WebElementFacade> productsAddButtons;
 
-
-
-    @FindBy(xpath = "//a[@class='shopping_cart_link']//span[@class='shopping_cart_badge']")
+    @FindBy(className = "shopping_cart_badge")
     WebElementFacade shoppingCartBadge;
 
-    @FindBy(xpath = "//a[@class='shopping_cart_link']")
+    @FindBy(className = "shopping_cart_link")
     WebElementFacade shoppingCartLink;
 
-    static String cartItemsXpath="//div[@class='cart_item']";
-    static List<WebElementFacade> cartItems;
-
-    static String cartItemNameXpath=".//div[@class='inventory_item_name']";
-    static String cartItemDescriptionXpath=".//div[@class='inventory_item_desc']";
-    static String cartItemPriceXpath=".//div[@class='inventory_item_price']";
     public void goToAboutPage(){
         menuButton.click();
-        aboutPageLink = withTimeoutOf(10, TimeUnit.SECONDS).find(By.xpath(aboutPageLinkXpath));
+        aboutPageLink = withTimeoutOf(Duration.ofSeconds(10)).find(By.id(aboutPageLinkId));
         aboutPageLink.click();
     }
+    public void checkPage(){
+        String currentUrl = getDriver().getCurrentUrl();
+        String expectedUrl = "https://www.saucedemo.com/inventory.html";
+        Assert.assertEquals(currentUrl,expectedUrl);
 
+        String currentTitle = getDriver().getTitle();
+        String expectedMainPageTitle = "Swag Labs";
+        Assert.assertEquals(currentTitle,expectedMainPageTitle);
+    }
     public void sortProductsLowToHigh(){
         productSortSelector.click();
         sortLowToHighOption.click();
@@ -57,15 +56,18 @@ public class MainPage extends PageObject {
 
     public void addMostExpensive(String number_items){
         int itemsToAdd = Integer.parseInt(number_items);
-        productsAddButtons = withTimeoutOf(10, TimeUnit.SECONDS).findAll(By.xpath(productsAddButtonsXpath));
+        productsAddButtons = withTimeoutOf(Duration.ofSeconds(10)).findAll(By.className(productsAddButtonsClass));
         int amountOfProducts = productsAddButtons.size();
         for (int i = amountOfProducts-1; i>=Math.max(amountOfProducts-itemsToAdd, 0); i--){
             productsAddButtons.get(i).click();
         }
     }
-
-    public void checkNumberAtCartBadge(String expectedNumber){//Should Return an error
+    public void scrollToTop() throws InterruptedException {
         ((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, 0)");
+        Thread.sleep(50);//Wait for the window to be scrolled before screenshot
+
+    }
+    public void checkNumberAtCartBadge(String expectedNumber){//Should Return an error
         String amount_loaded = shoppingCartBadge.getText();
         Assert.assertEquals(expectedNumber,amount_loaded);
     }
@@ -76,7 +78,7 @@ public class MainPage extends PageObject {
 
     public void resetAppState(){
         menuButton.click();
-        resetStateLink = withTimeoutOf(10, TimeUnit.SECONDS).find(By.xpath(resetStateLinkXpath));
+        resetStateLink = withTimeoutOf(Duration.ofSeconds(10)).find(By.id(resetStateLinkId));
         resetStateLink.click();
     }
 }

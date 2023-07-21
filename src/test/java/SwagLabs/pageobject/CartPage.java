@@ -6,25 +6,27 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CartPage extends PageObject {
-    @FindBy(xpath = "//button[@id='checkout']")
+    @FindBy(id = "checkout")
     WebElementFacade checkoutButton;
-    static String cartItemsXpath="//div[@class='cart_item']";
+    static String cartItemsClass="cart_item";
     static List<WebElementFacade> cartItems;
 
-    static String cartItemNameXpath=".//div[@class='inventory_item_name']";
-    static String cartItemDescriptionXpath=".//div[@class='inventory_item_desc']";
-    static String cartItemPriceXpath=".//div[@class='inventory_item_price']";
+    static String cartItemNameClass="inventory_item_name";
+    static String cartItemDescriptionClass="inventory_item_desc";
+    static String cartItemPriceClass="inventory_item_price";
 
     public void storeCartItemsInfo(){
-        cartItems = withTimeoutOf(10, TimeUnit.SECONDS).findAll(By.xpath(cartItemsXpath));
+        cartItems = withTimeoutOf(Duration.ofSeconds(10)).findAll(By.className(cartItemsClass));
+
         for (WebElementFacade cartItem: cartItems){
-            String itemName= cartItem.findElement(By.xpath(cartItemNameXpath)).getText();
-            String itemDescription = cartItem.findElement(By.xpath(cartItemDescriptionXpath)).getText();
-            String itemPrice = cartItem.findElement(By.xpath(cartItemPriceXpath)).getText();
+            String itemName= cartItem.findElement(By.className(cartItemNameClass)).getText();
+            String itemDescription = cartItem.findElement(By.className(cartItemDescriptionClass)).getText();
+            String itemPrice = cartItem.findElement(By.className(cartItemPriceClass)).getText();
 
             String details = itemName +"\n"+ itemDescription + "\n" + itemPrice+"\n";
             Serenity.recordReportData().withTitle("Details of Cart Item").andContents(details);

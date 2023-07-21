@@ -35,6 +35,9 @@ public class SwagLabsUser extends ScenarioActor {
     public void goBackFromAbout(){
         aboutPage.goBack();
     }
+    public void checkMainPage(){
+        mainPage.checkPage();
+    }
 
     public void sortProductsLowToHigh(){
         mainPage.sortProductsLowToHigh();
@@ -43,6 +46,11 @@ public class SwagLabsUser extends ScenarioActor {
         mainPage.addMostExpensive(number_items);
     }
     public void checkNumberAtCartBadge(String expectedNumber){
+        try{
+            mainPage.scrollToTop();
+        }catch (Exception e){
+            System.out.println(e);
+        }
         mainPage.checkNumberAtCartBadge(expectedNumber);
     }
     public void resetAppState(){
@@ -71,5 +79,8 @@ public class SwagLabsUser extends ScenarioActor {
     }
     public void checkSuccess(){
         checkoutCompletePage.checkConfirmation();
+    }
+    public  void checkErrorMessage(){
+        checkoutOnePage.checkErrorMessage();
     }
 }

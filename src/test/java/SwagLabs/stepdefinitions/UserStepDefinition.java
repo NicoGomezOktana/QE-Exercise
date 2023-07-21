@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Steps;
 
@@ -26,7 +27,7 @@ public class UserStepDefinition {
         Serenity.takeScreenshot();
     }
 
-    @And("^User goes to About Page$")
+    @When("^User goes to About Page$")
     public void goToAboutPage(){
         user.goToAbout();
         Serenity.takeScreenshot();
@@ -38,13 +39,19 @@ public class UserStepDefinition {
         Serenity.takeScreenshot();
     }
 
+    @Then("^User sees the Page correctly$")
+    public void checkMainPage(){
+        user.checkMainPage();
+        Serenity.takeScreenshot();
+    }
+
     @Given("^User sorts the product from low to high price$")
     public void sortLowToHigh(){
         user.sortProductsLowToHigh();
         Serenity.takeScreenshot();
     }
 
-    @And("^User adds the (.*) most expensive products to the cart$")
+    @When("^User adds the (.*) most expensive products to the cart$")
     public void addProducts(String number_items){
         user.addMostExpensive(number_items);
         Serenity.takeScreenshot();
@@ -63,15 +70,15 @@ public class UserStepDefinition {
         Serenity.takeScreenshot();
     }
 
-    @And("^User Goes to Checkout$")
+    @And("^User goes to Checkout$")
     public void goToCheckout(){
         user.goToCheckout();
         Serenity.takeScreenshot();
     }
 
-    @And("^User fills personal data$")
-    public void fillCheckoutData(){
-        user.fillCheckoutData("First", "Last", "12345");
+    @And("^User fills (.*), (.*) and (.*)$")
+    public void fillCheckoutData(String firstName, String lastName, String zipCode){
+        user.fillCheckoutData(firstName, lastName, zipCode);
         Serenity.takeScreenshot();
         user.continueCheckout();
     }
@@ -86,5 +93,12 @@ public class UserStepDefinition {
     public void checkSuccess(){
         user.checkSuccess();
         Serenity.takeScreenshot();
+        user.resetAppState();
+    }
+    @Then("^An error message is displayed$")
+    public void checkErrorMessage(){
+        user.checkErrorMessage();
+        Serenity.takeScreenshot();
+        user.resetAppState();
     }
 }

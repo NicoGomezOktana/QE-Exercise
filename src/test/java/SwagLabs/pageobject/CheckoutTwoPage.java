@@ -8,34 +8,31 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CheckoutTwoPage extends PageObject {
-    static String pricesXpath="//div[@class='inventory_item_price']";
+    static String pricesClass="inventory_item_price";
     static List<WebElementFacade> priceTags;
-
-
-
     @FindBy(xpath = "//div[contains(text(),'Payment Information')]//following::div[@class='summary_value_label']")
     WebElementFacade paymentInfoLabel;
-
     @FindBy(xpath = "//div[contains(text(),'Shipping Information')]//following::div[@class='summary_value_label']")
     WebElementFacade shippingInfoLabel;
 
-    @FindBy(xpath = "//div[@class='summary_subtotal_label']")
+    @FindBy(className = "summary_subtotal_label")
     WebElementFacade subtotalInfoLabel;
-    @FindBy(xpath = "//div[@class='summary_tax_label']")
+    @FindBy(className = "summary_tax_label")
     WebElementFacade taxInfoLabel;
-    @FindBy(xpath = "//div[@class='summary_info_label summary_total_label']")
+    @FindBy(className = "summary_total_label")
     WebElementFacade totalInfoLabel;
 
-    @FindBy(xpath = "//button[@id='finish']")
+    @FindBy(id = "finish")
     WebElementFacade finishButton;
 
     public void checkPrices(){
         ((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, document.body.scrollHeight)");
-        priceTags= withTimeoutOf(10, TimeUnit.SECONDS).findAll(By.xpath(pricesXpath));
+        priceTags= withTimeoutOf(Duration.ofSeconds(10)).findAll(By.className(pricesClass));
         Double subtotalPriceSum = (double)0;
         for (WebElementFacade priceTag: priceTags){
             String priceString = priceTag.getText().replace("$",""); //Verify if this is correct, or split by $

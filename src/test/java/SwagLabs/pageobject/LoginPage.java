@@ -5,13 +5,13 @@ import net.thucydides.core.pages.PageObject;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends PageObject {
-    @FindBy(xpath = "//input[@id='user-name']")
+    @FindBy(id = "user-name")
     WebElementFacade usernameInputBox;
 
-    @FindBy(xpath = "//input[@id='password']")
+    @FindBy(id="password")
     WebElementFacade passwordInputBox;
 
-    @FindBy(xpath = "//input[@id='login-button']")
+    @FindBy(id = "login-button")
     WebElementFacade loginButton;
 
     public void loginAsUser(String username, String password){

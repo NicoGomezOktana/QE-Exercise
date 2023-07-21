@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.openqa.selenium.support.FindBy;
 
 public class CheckoutCompletePage extends PageObject {
-    @FindBy(xpath = "//h2[@class='complete-header']")
+    @FindBy(className = "complete-header")
     WebElementFacade headerText;
 
     public void checkConfirmation(){
